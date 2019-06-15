@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:c="http://www.springframework.org/schema/c"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+
+    <!-- Instantiating Beans -->
+    <!-- Instantiation with a Constructor -->
+    <bean id="user" class="com.spectre.beans.User" scope="prototype">
+        <property name="name" value="Jack"/>
+    </bean>
+
+    <!-- Instantiation with a Static Factory Method -->
+    <bean id="clientService" class="com.spectre.beans.ClientService" factory-method="getInstance"/>
+
+    <!-- Instantiation by Using an Instance Factory Method -->
+    <bean id="serviceLocator" class="com.spectre.beans.DefaultServiceLocator">
+        <!-- inject any dependencies required by this locator bean -->
+    </bean>
+    <bean id="clientFactoryService" factory-bean="serviceLocator" factory-method="getClientService"/>
+    <bean id="accountFactoryService" factory-bean="serviceLocator" factory-method="getAccountService"/>
+
+
+    <!-- Dependency Injection -->
+    <!-- Constructor-based Dependency Injection -->
+    <bean id="beanOne" class="com.spectre.dependencies.constructor.ThingOne">
+        <constructor-arg index="0" ref="beanTwo"/>
+        <constructor-arg index="1" ref="beanThree"/>
+    </bean>
+    <bean id="beanTwo" class="com.spectre.dependencies.constructor.ThingTwo"/>
+    <bean id="beanThree" class="com.spectre.dependencies.constructor.ThingThree"/>
+
+    <bean id="beanOneAnother" class="com.spectre.dependencies.constructor.ThingOne">
+        <constructor-arg name="s" value="Hello"/>
+        <constructor-arg name="i" value="1"/>
+    </bean>
+    <!-- c标签 -->
+    <bean id="beanOneC" class="com.spectre.dependencies.constructor.ThingOne" c:i="10" c:s="hello"/>
+
+    <!-- Setter-based Dependency Injection -->
+    <bean id="beanFour" class="com.spectre.dependencies.setter.ThingFour">
+        <property name="thingTwo" ref="beanTwo"/>
+        <property name="s" value="hello"/>
+    </bean>
+    <!-- p标签 -->
+    <bean id="beanFive" class="com.spectre.dependencies.setter.ThingFive"
+          p:name="HelloP" p:age="18"/>
+
+    <!-- Collections -->
+    <bean id="collectionsBean" class="com.spectre.dependencies.collections.CollectionsBean">
+        <!-- results in a setAdminEmails(java.util.Properties) call -->
+        <property name="adminEmails">
+            <props>
+                <prop key="administrator">administrator@example.org</prop>
+                <prop key="support">support@example.org</prop>
+            </props>
+        </property>
+        <!-- results in a setSomeList(java.util.List) call -->
+        <property name="someList">
+            <list>
+                <value>a list element followed by a reference</value>
+                <ref bean="user"/>
+            </list>
+        </property>
+        <!-- results in a setSomeMap(java.util.Map) call -->
+        <property name="someMap">
+            <map>
+                <entry key="an entry" value="some string"/>
+                <entry key="a ref" value-ref="user"/>
+            </map>
+        </property>
+        <!-- results in a setSomeSet(java.util.Set) call -->
+        <property name="someSet">
+            <set>
+                <value>some string</value>
+                <ref bean="user"/>
+            </set>
+        </property>
+    </bean>
+
+    <!-- Autowiring Autowiring modes:no(default) byName byType constructor -->
+    <bean id="autowiringEntity" class="com.spectre.dependencies.autowire.AutowireEntity" autowire="byName" />
+
+
+    <!-- 别名-->
+    <alias name="user" alias="user-alias"/>
+</beans>
