@@ -3,7 +3,9 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:c="http://www.springframework.org/schema/c"
        xmlns:p="http://www.springframework.org/schema/p"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd">
 
 
     <!-- Instantiating Beans -->
@@ -81,7 +83,29 @@
     </bean>
 
     <!-- Autowiring Autowiring modes:no(default) byName byType constructor -->
-    <bean id="autowiringEntity" class="com.spectre.dependencies.autowire.AutowireEntity" autowire="byName" />
+    <bean id="autowiringEntity" class="com.spectre.dependencies.autowire.AutowireEntity" autowire="byName"/>
+
+    <!--  CustomScope -->
+    <bean class="org.springframework.beans.factory.config.CustomScopeConfigurer">
+        <property name="scopes">
+            <map>
+                <entry key="myScope">
+                    <bean class="com.spectre.dependencies.config.scope.MyScope"/>
+                </entry>
+            </map>
+        </property>
+    </bean>
+
+    <bean id="thing2" class="com.spectre.dependencies.config.scope.Thing2" scope="myScope">
+        <property name="name" value="Rick"/>
+        <!-- When you place <aop:scoped-proxy/> in a FactoryBean implementation,
+        it is the factory bean itself that is scoped, not the object returned from getObject(). -->
+        <aop:scoped-proxy/>
+    </bean>
+
+    <bean id="thing1" class="com.spectre.dependencies.config.scope.Thing1">
+        <property name="thing2" ref="thing2"/>
+    </bean>
 
 
     <!-- 别名-->
