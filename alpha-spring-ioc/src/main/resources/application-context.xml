@@ -83,7 +83,7 @@
     </bean>
 
     <!-- Autowiring Autowiring modes:no(default) byName byType constructor -->
-    <bean id="autowiringEntity" class="com.spectre.dependencies.autowire.AutowireEntity" autowire="byName"/>
+    <bean id="autowiringEntity" class="com.spectre.dependencies.autowire.AutowireEntity" autowire="byType"/>
 
     <!--  CustomScope -->
     <bean class="org.springframework.beans.factory.config.CustomScopeConfigurer">
