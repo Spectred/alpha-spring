@@ -13,5 +13,6 @@ repositories {
 
 dependencies {
     testCompile 'junit:junit:4.12'
-}
+    compile 'org.apache.tomcat.embed:tomcat-embed-core:8.5.23'
 
+}

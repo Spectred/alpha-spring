@@ -1,2 +1,4 @@
 rootProject.name = 'alpha-spring'
+include 'test'
+include 'framework'
 
